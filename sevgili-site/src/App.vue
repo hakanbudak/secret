@@ -1,5 +1,5 @@
 <template>
-  <div class="bg">
+  <div class="bg" @click="enableAudio">
     <div class="overlay">
       <CountDown />
       <HeartEffect />
@@ -13,8 +13,8 @@
         Bu yüzden kendimi çok şanslı hissediyorum iyi ki varsın.
         Seni çok seviyorum. 💖
       </p>
-      <audio ref="audioPlayer" loop autoplay>
-        <source src='../src/assets/Candan-Ercetin-Melek.mp3' type="audio/mp3">
+      <audio ref="audioPlayer" loop>
+        <source src="/Candan-Ercetin-Melek.mp3" type="audio/mp3">
       </audio>
     </div>
   </div>
@@ -36,15 +36,24 @@ export default {
     };
   },
   mounted() {
-    // Sayfa açıldığında müziği başlat
-    this.$refs.audioPlayer.play().catch(() => {
-      console.log("Otomatik oynatma engellendi, kullanıcı etkileşimi bekleniyor.");
-    });
-
     // 10 saniye sonra mesajı göster
     setTimeout(() => {
       this.showMessage = true;
     }, 10000);
+  },
+  methods: {
+    enableAudio() {
+      const audio = this.$refs.audioPlayer;
+
+      if (!this.isPlaying) {
+        audio.play().then(() => {
+          console.log("Müzik başladı!");
+          this.isPlaying = true;
+        }).catch((error) => {
+          console.log("Müzik başlatılamadı:", error);
+        });
+      }
+    }
   }
 };
 </script>
